@@ -929,6 +929,19 @@ def load_sub_model(
         if model_quant_config is not None:
             loading_kwargs["quantization_config"] = model_quant_config
 
+    component_path = os.path.join(cached_folder, name) if os.path.isdir(os.path.join(cached_folder, name)) else None
+    if is_transformers_model and class_obj.__name__ == "Qwen3VLModel" and component_path is not None:
+        config = class_obj.config_class.from_pretrained(component_path)
+        text_config = getattr(config, "text_config", None)
+        rope_parameters = getattr(text_config, "rope_parameters", None)
+        if (
+            text_config is not None
+            and getattr(text_config, "rope_scaling", None) is None
+            and rope_parameters is not None
+        ):
+            text_config.rope_scaling = rope_parameters
+            loading_kwargs["config"] = config
+
     # check if the module is in a subdirectory
     if dduf_entries:
         loading_kwargs["dduf_entries"] = dduf_entries
