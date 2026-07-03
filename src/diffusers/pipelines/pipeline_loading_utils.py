@@ -460,6 +460,16 @@ def get_class_obj_and_candidates(
         # else we just import it from the library.
         library = importlib.import_module(library_name)
 
+        # Some Qwen-family checkpoints save only `tokenizer.json`, while older generated model indexes can still point
+        # at the slow tokenizer class. The slow class expects vocab/merge files and fails with a `None` vocab path.
+        if (
+            class_name == "Qwen2Tokenizer"
+            and component_folder is not None
+            and os.path.isfile(os.path.join(component_folder, "tokenizer.json"))
+            and not os.path.isfile(os.path.join(component_folder, "vocab.json"))
+        ):
+            class_name = "Qwen2TokenizerFast"
+
         # Handle deprecated Transformers classes
         if library_name == "transformers":
             class_name = _maybe_remap_transformers_class(class_name) or class_name
