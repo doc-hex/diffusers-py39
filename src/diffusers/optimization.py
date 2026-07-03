@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """PyTorch optimization for diffusion models."""
+from __future__ import annotations
 
 import math
 from enum import Enum

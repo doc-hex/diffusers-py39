@@ -14,6 +14,8 @@
 
 # This is a single file implementation of LMD+. See README.md for examples.
 
+from __future__ import annotations
+
 import ast
 import gc
 import inspect

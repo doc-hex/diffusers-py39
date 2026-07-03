@@ -2,6 +2,7 @@
 modeled after the textual_inversion.py / train_dreambooth.py and the work
 of justinpinkney here: https://github.com/justinpinkney/stable-diffusion/blob/main/notebooks/imagic.ipynb
 """
+from __future__ import annotations
 
 import inspect
 import warnings

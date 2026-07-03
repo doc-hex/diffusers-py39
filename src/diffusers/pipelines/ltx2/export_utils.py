@@ -17,6 +17,8 @@
 # can share it. This module remains as a deprecation shim for existing user code that
 # does `from diffusers.pipelines.ltx2.export_utils import encode_video`.
 
+from __future__ import annotations
+
 from fractions import Fraction
 from pathlib import Path
 from typing import Callable

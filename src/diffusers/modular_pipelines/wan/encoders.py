@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+from typing import Union
+
 import html
 
 import numpy as np
@@ -573,14 +576,14 @@ class WanPrepareFirstFrameLatentsStep(ModularPipelineBlocks):
     @property
     def inputs(self) -> list[InputParam]:
         return [
-            InputParam("first_frame_latents", type_hint=torch.Tensor | None),
+            InputParam("first_frame_latents", type_hint=Union[torch.Tensor, None]),
             InputParam("num_frames", required=True),
         ]
 
     @property
     def intermediate_outputs(self) -> list[OutputParam]:
         return [
-            OutputParam("image_condition_latents", type_hint=torch.Tensor | None),
+            OutputParam("image_condition_latents", type_hint=Union[torch.Tensor, None]),
         ]
 
     def __call__(self, components: WanModularPipeline, state: PipelineState) -> PipelineState:
@@ -722,14 +725,14 @@ class WanPrepareFirstLastFrameLatentsStep(ModularPipelineBlocks):
     @property
     def inputs(self) -> list[InputParam]:
         return [
-            InputParam("first_last_frame_latents", type_hint=torch.Tensor | None),
+            InputParam("first_last_frame_latents", type_hint=Union[torch.Tensor, None]),
             InputParam("num_frames", type_hint=int, required=True),
         ]
 
     @property
     def intermediate_outputs(self) -> list[OutputParam]:
         return [
-            OutputParam("image_condition_latents", type_hint=torch.Tensor | None),
+            OutputParam("image_condition_latents", type_hint=Union[torch.Tensor, None]),
         ]
 
     def __call__(self, components: WanModularPipeline, state: PipelineState) -> PipelineState:

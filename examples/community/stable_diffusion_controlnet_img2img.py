@@ -1,5 +1,7 @@
 # Inspired by: https://github.com/haofanwang/ControlNet-for-Diffusers/
 
+from __future__ import annotations
+
 import inspect
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import functools
 import glob
 import importlib
@@ -19,7 +21,7 @@ from collections import UserDict
 from contextlib import contextmanager
 from io import BytesIO, StringIO
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Callable, Set
+from typing import Any, Callable, Set, TYPE_CHECKING, Union
 
 import numpy as np
 import PIL.Image
@@ -976,7 +978,7 @@ def pytest_terminal_summary_main(tr, id):
             msg = tr._getfailureheadline(rep)
             tr.write_sep("_", msg, red=True, bold=True)
             # chop off the optional leading extra frames, leaving only the last one
-            longrepr = re.sub(r".*_ _ _ (_ ){10,}_ _ ", "", rep.longreprtext, 0, re.M | re.S)
+            longrepr = re.sub(r".*_ _ _ (_ ){10,}_ _ ", "", rep.longreprtext, 0, Union[re.M, re.S])
             tr._tw.line(longrepr)
             # note: not printing out any rep.sections to keep the report short
 
@@ -1436,7 +1438,7 @@ if is_torch_available():
 # Modified from https://github.com/huggingface/transformers/blob/cdfb018d0300fef3b07d9220f3efe9c2a9974662/src/transformers/testing_utils.py#L3090
 
 # Type definition of key used in `Expectations` class.
-DeviceProperties = tuple[str | None, int | None]
+DeviceProperties = tuple[Union[str, None], Union[int, None]]
 
 
 @functools.lru_cache

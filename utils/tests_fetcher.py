@@ -48,6 +48,7 @@ Base use to fetch the tests on a the main branch (with diff from the last commit
 python utils/tests_fetcher.py --diff_with_last_commit
 ```
 """
+from __future__ import annotations
 
 import argparse
 import collections

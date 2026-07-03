@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Conversion script for stable diffusion checkpoints which _only_ contain a controlnet."""
+from __future__ import annotations
 
 import argparse
 import re

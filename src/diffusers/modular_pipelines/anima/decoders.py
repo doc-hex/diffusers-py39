@@ -1,3 +1,5 @@
+from typing import Union
+
 # Copyright 2026 The HuggingFace Team. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -96,7 +98,7 @@ class AnimaProcessImagesOutputStep(ModularPipelineBlocks):
         return [
             OutputParam(
                 "images",
-                type_hint=list[PIL.Image.Image] | np.ndarray | torch.Tensor,
+                type_hint=Union[list[PIL.Image.Image], np.ndarray, torch.Tensor],
                 description="Generated images.",
             )
         ]

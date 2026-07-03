@@ -1,6 +1,8 @@
 # A diffuser version implementation of Zero1to3 (https://github.com/cvlab-columbia/zero123), ICCV 2023
 # by Xin Kong
 
+from __future__ import annotations
+
 import inspect
 from typing import Any, Callable, Dict, List, Optional, Union
 

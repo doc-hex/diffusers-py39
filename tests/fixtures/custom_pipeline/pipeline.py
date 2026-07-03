@@ -15,6 +15,8 @@
 # limitations under the License.
 
 
+from __future__ import annotations
+
 import torch
 
 from diffusers import DiffusionPipeline, ImagePipelineOutput, SchedulerMixin, UNet2DModel

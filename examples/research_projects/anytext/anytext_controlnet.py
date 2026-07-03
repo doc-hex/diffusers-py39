@@ -19,6 +19,8 @@
 # Adapted to Diffusers by [M. Tolga Cangöz](https://github.com/tolgacangoz).
 
 
+from __future__ import annotations
+
 from typing import Any, Dict, Optional, Tuple, Union
 
 import torch

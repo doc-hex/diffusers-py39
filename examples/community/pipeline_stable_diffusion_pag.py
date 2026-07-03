@@ -1,6 +1,8 @@
 # Implementation of StableDiffusionPipeline with PAG
 # https://ku-cvlab.github.io/Perturbed-Attention-Guidance
 
+from __future__ import annotations
+
 import inspect
 from typing import Any, Callable, Dict, List, Optional, Union
 

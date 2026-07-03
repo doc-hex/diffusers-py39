@@ -6,6 +6,8 @@
 # Medium: https://medium.com/@xhinker
 ## -----------------------------------------------------------
 
+from __future__ import annotations
+
 import inspect
 import os
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union

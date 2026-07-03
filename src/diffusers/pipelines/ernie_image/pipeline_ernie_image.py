@@ -15,6 +15,7 @@
 """
 Ernie-Image Pipeline for HuggingFace Diffusers.
 """
+from __future__ import annotations
 
 import json
 from typing import Callable, List, Optional, Union

@@ -21,6 +21,7 @@ closely mirroring ComfyUI's `sample_euler_ancestral_RF` implementation used for 
 Reference implementation (ComfyUI):
     comfy.k_diffusion.sampling.sample_euler_ancestral_RF
 """
+from __future__ import annotations
 
 from dataclasses import dataclass
 

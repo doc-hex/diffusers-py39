@@ -1,6 +1,7 @@
 """
 modified based on diffusion library from Huggingface: https://github.com/huggingface/diffusers/blob/main/src/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion.py
 """
+from __future__ import annotations
 
 import inspect
 from typing import Callable, List, Optional, Union

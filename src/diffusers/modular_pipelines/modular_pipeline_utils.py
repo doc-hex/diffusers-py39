@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+
 import inspect
 import re
 import warnings
@@ -405,7 +407,7 @@ INPUT_PARAM_TEMPLATES = {
         "description": "Strength for img2img/inpainting.",
     },
     "image": {
-        "type_hint": PIL.Image.Image | list[PIL.Image.Image],
+        "type_hint": Union[PIL.Image.Image, list[PIL.Image.Image]],
         "required": True,
         "description": "Reference image(s) for denoising. Can be a single image or list of images.",
     },

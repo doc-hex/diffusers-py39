@@ -12,8 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+
 import inspect
-from typing import Any
+from typing import Any, Union
 
 import PIL
 import torch
@@ -1502,7 +1504,7 @@ class StableDiffusionXLControlNetInputStep(ModularPipelineBlocks):
             ),
             InputParam(
                 "crops_coords",
-                type_hint=tuple[int] | None,
+                type_hint=Union[tuple[int], None],
                 description="The crop coordinates to use for preprocess/postprocess the image and mask, for inpainting task only. Can be generated in vae_encode step.",
             ),
         ]
@@ -1723,7 +1725,7 @@ class StableDiffusionXLControlNetUnionInputStep(ModularPipelineBlocks):
             ),
             InputParam(
                 "crops_coords",
-                type_hint=tuple[int] | None,
+                type_hint=Union[tuple[int], None],
                 description="The crop coordinates to use for preprocess/postprocess the image and mask, for inpainting task only. Can be generated in vae_encode step.",
             ),
         ]

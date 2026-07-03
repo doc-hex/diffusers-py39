@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+from typing import Union
+
 import inspect
 
 import numpy as np
@@ -203,7 +206,7 @@ class Flux2PrepareLatentsStep(ModularPipelineBlocks):
         return [
             InputParam("height", type_hint=int),
             InputParam("width", type_hint=int),
-            InputParam("latents", type_hint=torch.Tensor | None),
+            InputParam("latents", type_hint=Union[torch.Tensor, None]),
             InputParam("num_images_per_prompt", type_hint=int, default=1),
             InputParam("generator"),
             InputParam(

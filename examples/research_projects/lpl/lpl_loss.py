@@ -144,7 +144,7 @@ class LatentPerceptualLoss(nn.Module):
             losses = []
             self.last_feature_stats = []  # Reset feature stats
 
-            for i, (x, y) in enumerate(zip(inp_f, tar_f, strict=False)):
+            for i, (x, y) in enumerate(zip(inp_f, tar_f)):
                 my = torch.ones_like(y).bool()
                 outlier_ratio = 0.0
 

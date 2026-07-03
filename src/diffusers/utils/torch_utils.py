@@ -19,7 +19,9 @@ from __future__ import annotations
 
 import functools
 import os
-from typing import Callable, ParamSpec, TypeVar
+from typing import Callable, TypeVar
+
+from typing_extensions import ParamSpec
 
 from . import logging
 from .import_utils import (

@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+from typing import Union
+
 import math
 import warnings
 
@@ -26,7 +29,7 @@ from .utils import CONFIG_NAME, PIL_INTERPOLATION, deprecate
 
 
 PipelineImageInput = (
-    PIL.Image.Image | np.ndarray | torch.Tensor | list[PIL.Image.Image] | list[np.ndarray] | list[torch.Tensor]
+    Union[PIL.Image.Image, np.ndarray, torch.Tensor, list[PIL.Image.Image], list[np.ndarray], list[torch.Tensor]]
 )
 
 PipelineDepthInput = PipelineImageInput

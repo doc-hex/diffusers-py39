@@ -14,6 +14,7 @@
 """
 PEFT utilities: Utilities related to peft library
 """
+from __future__ import annotations
 
 import collections
 import functools

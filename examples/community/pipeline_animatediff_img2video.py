@@ -18,6 +18,8 @@
 # by creating a copy of the image `num_frames` times and progressively adding
 # more noise to the image based on the strength and latent interpolation method.
 
+from __future__ import annotations
+
 import inspect
 from types import FunctionType
 from typing import Any, Callable, Dict, List, Optional, Union

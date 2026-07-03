@@ -1,3 +1,5 @@
+from typing import Union
+
 # Copyright 2026 The HuggingFace Team. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,7 +61,7 @@ class StableDiffusion3DecodeStep(ModularPipelineBlocks):
 
     @property
     def intermediate_outputs(self) -> list[OutputParam]:
-        return [OutputParam("images", type_hint=list[PIL.Image.Image] | torch.Tensor)]
+        return [OutputParam("images", type_hint=Union[list[PIL.Image.Image], torch.Tensor])]
 
     @torch.no_grad()
     def __call__(self, components, state: PipelineState) -> PipelineState:

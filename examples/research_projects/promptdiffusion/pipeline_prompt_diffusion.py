@@ -18,6 +18,8 @@
 # Code: https://github.com/Zhendong-Wang/Prompt-Diffusion
 #
 # Adapted to Diffusers by [iczaw](https://github.com/iczaw).
+from __future__ import annotations
+
 import inspect
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 

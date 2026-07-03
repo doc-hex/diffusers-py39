@@ -1,4 +1,6 @@
 # Inspired by: https://github.com/Mikubill/sd-webui-controlnet/discussions/1236 and https://github.com/Mikubill/sd-webui-controlnet/discussions/1280
+from __future__ import annotations
+
 import inspect
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 

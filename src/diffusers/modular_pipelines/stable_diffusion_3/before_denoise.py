@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+from typing import Union
+
 import inspect
 
 import torch
@@ -335,7 +338,7 @@ class StableDiffusion3PrepareLatentsStep(ModularPipelineBlocks):
             ),
             InputParam(
                 "latents",
-                type_hint=torch.Tensor | None,
+                type_hint=Union[torch.Tensor, None],
                 description="Pre-generated noisy latents to be used as inputs for image generation.",
             ),
             InputParam(

@@ -1,3 +1,5 @@
+from typing import Union
+
 # Copyright 2026 The HuggingFace Team. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,30 +94,30 @@ class StableDiffusionXLModularPipeline(
 # auto_docstring
 SDXL_INPUTS_SCHEMA = {
     "prompt": InputParam(
-        "prompt", type_hint=str | list[str], description="The prompt or prompts to guide the image generation"
+        "prompt", type_hint=Union[str, list[str]], description="The prompt or prompts to guide the image generation"
     ),
     "prompt_2": InputParam(
         "prompt_2",
-        type_hint=str | list[str],
+        type_hint=Union[str, list[str]],
         description="The prompt or prompts to be sent to the tokenizer_2 and text_encoder_2",
     ),
     "negative_prompt": InputParam(
         "negative_prompt",
-        type_hint=str | list[str],
+        type_hint=Union[str, list[str]],
         description="The prompt or prompts not to guide the image generation",
     ),
     "negative_prompt_2": InputParam(
         "negative_prompt_2",
-        type_hint=str | list[str],
+        type_hint=Union[str, list[str]],
         description="The negative prompt or prompts for text_encoder_2",
     ),
     "cross_attention_kwargs": InputParam(
         "cross_attention_kwargs",
-        type_hint=dict | None,
+        type_hint=Union[dict, None],
         description="Kwargs dictionary passed to the AttentionProcessor",
     ),
     "clip_skip": InputParam(
-        "clip_skip", type_hint=int | None, description="Number of layers to skip in CLIP text encoder"
+        "clip_skip", type_hint=Union[int, None], description="Number of layers to skip in CLIP text encoder"
     ),
     "image": InputParam(
         "image",
@@ -131,11 +133,11 @@ SDXL_INPUTS_SCHEMA = {
     ),
     "generator": InputParam(
         "generator",
-        type_hint=torch.Generator | list[torch.Generator] | None,
+        type_hint=Union[torch.Generator, list[torch.Generator], None],
         description="Generator(s) for deterministic generation",
     ),
-    "height": InputParam("height", type_hint=int | None, description="Height in pixels of the generated image"),
-    "width": InputParam("width", type_hint=int | None, description="Width in pixels of the generated image"),
+    "height": InputParam("height", type_hint=Union[int, None], description="Height in pixels of the generated image"),
+    "width": InputParam("width", type_hint=Union[int, None], description="Width in pixels of the generated image"),
     "num_images_per_prompt": InputParam(
         "num_images_per_prompt", type_hint=int, default=1, description="Number of images to generate per prompt"
     ),
@@ -143,14 +145,14 @@ SDXL_INPUTS_SCHEMA = {
         "num_inference_steps", type_hint=int, default=50, description="Number of denoising steps"
     ),
     "timesteps": InputParam(
-        "timesteps", type_hint=torch.Tensor | None, description="Custom timesteps for the denoising process"
+        "timesteps", type_hint=Union[torch.Tensor, None], description="Custom timesteps for the denoising process"
     ),
     "sigmas": InputParam(
-        "sigmas", type_hint=torch.Tensor | None, description="Custom sigmas for the denoising process"
+        "sigmas", type_hint=Union[torch.Tensor, None], description="Custom sigmas for the denoising process"
     ),
     "denoising_end": InputParam(
         "denoising_end",
-        type_hint=float | None,
+        type_hint=Union[float, None],
         description="Fraction of denoising process to complete before termination",
     ),
     # YiYi Notes: img2img defaults to 0.3, inpainting defaults to 0.9999
@@ -158,32 +160,32 @@ SDXL_INPUTS_SCHEMA = {
         "strength", type_hint=float, default=0.3, description="How much to transform the reference image"
     ),
     "denoising_start": InputParam(
-        "denoising_start", type_hint=float | None, description="Starting point of the denoising process"
+        "denoising_start", type_hint=Union[float, None], description="Starting point of the denoising process"
     ),
     "latents": InputParam(
-        "latents", type_hint=torch.Tensor | None, description="Pre-generated noisy latents for image generation"
+        "latents", type_hint=Union[torch.Tensor, None], description="Pre-generated noisy latents for image generation"
     ),
     "padding_mask_crop": InputParam(
         "padding_mask_crop",
-        type_hint=tuple[int, int] | None,
+        type_hint=Union[tuple[int, int], None],
         description="Size of margin in crop for image and mask",
     ),
     "original_size": InputParam(
         "original_size",
-        type_hint=tuple[int, int] | None,
+        type_hint=Union[tuple[int, int], None],
         description="Original size of the image for SDXL's micro-conditioning",
     ),
     "target_size": InputParam(
-        "target_size", type_hint=tuple[int, int] | None, description="Target size for SDXL's micro-conditioning"
+        "target_size", type_hint=Union[tuple[int, int], None], description="Target size for SDXL's micro-conditioning"
     ),
     "negative_original_size": InputParam(
         "negative_original_size",
-        type_hint=tuple[int, int] | None,
+        type_hint=Union[tuple[int, int], None],
         description="Negative conditioning based on image resolution",
     ),
     "negative_target_size": InputParam(
         "negative_target_size",
-        type_hint=tuple[int, int] | None,
+        type_hint=Union[tuple[int, int], None],
         description="Negative conditioning based on target resolution",
     ),
     "crops_coords_top_left": InputParam(
@@ -219,19 +221,19 @@ SDXL_INPUTS_SCHEMA = {
     ),
     "control_guidance_start": InputParam(
         "control_guidance_start",
-        type_hint=float | list[float],
+        type_hint=Union[float, list[float]],
         default=0.0,
         description="When ControlNet starts applying",
     ),
     "control_guidance_end": InputParam(
         "control_guidance_end",
-        type_hint=float | list[float],
+        type_hint=Union[float, list[float]],
         default=1.0,
         description="When ControlNet stops applying",
     ),
     "controlnet_conditioning_scale": InputParam(
         "controlnet_conditioning_scale",
-        type_hint=float | list[float],
+        type_hint=Union[float, list[float]],
         default=1.0,
         description="Scale factor for ControlNet outputs",
     ),
@@ -262,7 +264,7 @@ SDXL_INPUTS_SCHEMA = {
     "batch_size": InputParam("batch_size", type_hint=int, required=True, description="Number of prompts"),
     "dtype": InputParam("dtype", type_hint=torch.dtype, description="Data type of model tensor inputs"),
     "preprocess_kwargs": InputParam(
-        "preprocess_kwargs", type_hint=dict | None, description="Kwargs for ImageProcessor"
+        "preprocess_kwargs", type_hint=Union[dict, None], description="Kwargs for ImageProcessor"
     ),
     "latent_timestep": InputParam(
         "latent_timestep", type_hint=torch.Tensor, required=True, description="Initial noise level timestep"
@@ -282,7 +284,7 @@ SDXL_INPUTS_SCHEMA = {
     ),
     "timestep_cond": InputParam("timestep_cond", type_hint=torch.Tensor, description="Timestep conditioning for LCM"),
     "noise": InputParam("noise", type_hint=torch.Tensor, description="Noise added to image latents"),
-    "crops_coords": InputParam("crops_coords", type_hint=tuple[int] | None, description="Crop coordinates"),
+    "crops_coords": InputParam("crops_coords", type_hint=Union[tuple[int], None], description="Crop coordinates"),
     "ip_adapter_embeds": InputParam(
         "ip_adapter_embeds", type_hint=list[torch.Tensor], description="Image embeddings for IP-Adapter"
     ),
@@ -293,7 +295,7 @@ SDXL_INPUTS_SCHEMA = {
     ),
     "images": InputParam(
         "images",
-        type_hint=list[PIL.Image.Image] | list[torch.Tensor] | list[np.array],
+        type_hint=Union[list[PIL.Image.Image], list[torch.Tensor], list[np.array]],
         required=True,
         description="Generated images",
     ),
@@ -322,7 +324,7 @@ SDXL_INTERMEDIATE_OUTPUTS_SCHEMA = {
     "masked_image_latents": OutputParam(
         "masked_image_latents", type_hint=torch.Tensor, description="Masked image latents for inpainting"
     ),
-    "crops_coords": OutputParam("crops_coords", type_hint=tuple[int] | None, description="Crop coordinates"),
+    "crops_coords": OutputParam("crops_coords", type_hint=Union[tuple[int], None], description="Crop coordinates"),
     "timesteps": OutputParam("timesteps", type_hint=torch.Tensor, description="Timesteps for inference"),
     "num_inference_steps": OutputParam("num_inference_steps", type_hint=int, description="Number of denoising steps"),
     "latent_timestep": OutputParam(
@@ -345,7 +347,7 @@ SDXL_INTERMEDIATE_OUTPUTS_SCHEMA = {
     ),
     "images": OutputParam(
         "images",
-        type_hint=list[PIL.Image.Image] | list[torch.Tensor] | list[np.array],
+        type_hint=Union[list[PIL.Image.Image], list[torch.Tensor], list[np.array]],
         description="Generated images",
     ),
 }
@@ -354,7 +356,10 @@ SDXL_INTERMEDIATE_OUTPUTS_SCHEMA = {
 SDXL_OUTPUTS_SCHEMA = {
     "images": OutputParam(
         "images",
-        type_hint=tuple[list[PIL.Image.Image] | list[torch.Tensor] | list[np.array]] | StableDiffusionXLPipelineOutput,
+        type_hint=Union[
+            tuple[Union[list[PIL.Image.Image], list[torch.Tensor], list[np.array]]],
+            StableDiffusionXLPipelineOutput,
+        ],
         description="The final generated images",
     )
 }

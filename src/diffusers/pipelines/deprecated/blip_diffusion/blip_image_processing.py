@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Image processor class for BLIP."""
+from __future__ import annotations
 
 import numpy as np
 import torch

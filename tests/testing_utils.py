@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import functools
 import glob
 import importlib
@@ -1200,7 +1202,7 @@ def pytest_terminal_summary_main(tr, id):
             msg = tr._getfailureheadline(rep)
             tr.write_sep("_", msg, red=True, bold=True)
             # chop off the optional leading extra frames, leaving only the last one
-            longrepr = re.sub(r".*_ _ _ (_ ){10,}_ _ ", "", rep.longreprtext, 0, re.M | re.S)
+            longrepr = re.sub(r".*_ _ _ (_ ){10,}_ _ ", "", rep.longreprtext, 0, Union[re.M, re.S])
             tr._tw.line(longrepr)
             # note: not printing out any rep.sections to keep the report short
 

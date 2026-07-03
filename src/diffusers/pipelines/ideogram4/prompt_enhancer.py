@@ -23,6 +23,7 @@ text, so `outlines` (an optional dependency) is used to guarantee a schema-valid
 
 The caption helpers here are shared by `Ideogram4Pipeline` and the modular `Ideogram4PromptUpsampleStep`.
 """
+from __future__ import annotations
 
 import math
 

@@ -15,6 +15,8 @@
 # ignore the entire file for precommit
 # type: ignore
 
+from __future__ import annotations
+
 import inspect
 from collections.abc import Callable
 from typing import Any, Dict, List, Optional, Tuple, Union

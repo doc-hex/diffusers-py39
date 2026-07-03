@@ -114,7 +114,7 @@ _deps = [
     "torchsde",
     "note_seq",
     "librosa",
-    # librosa pulls in numba/llvmlite; pin to versions that support Python 3.10+
+    # librosa pulls in numba/llvmlite; pin to versions that support Python 3.9+
     "llvmlite>=0.40.0",
     "numba>=0.57.0",
     "numpy",
@@ -124,7 +124,7 @@ _deps = [
     "pytest",
     "pytest-timeout",
     "pytest-xdist",
-    "python>=3.10.0",
+    "python>=3.9.0",
     "ruff==0.9.10",
     "safetensors>=0.8.0",
     "sentencepiece>=0.1.91,!=0.1.92",
@@ -295,7 +295,7 @@ setup(
     packages=find_packages("src"),
     package_data={"diffusers": ["py.typed"]},
     include_package_data=True,
-    python_requires=">=3.10.0",
+    python_requires=">=3.9.0",
     install_requires=list(install_requires),
     extras_require=extras,
     entry_points={"console_scripts": ["diffusers-cli=diffusers.commands.diffusers_cli:main"]},

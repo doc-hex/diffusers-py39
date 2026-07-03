@@ -3,6 +3,7 @@ ChromaInpaintPipeline implements a text-guided image inpainting pipeline for the
 the ChromaPipeline from Hugging Face Diffusers:contentReference[oaicite:0]{index=0} and the Stable Diffusion inpainting
 approach:contentReference[oaicite:1]{index=1}.
 """
+from __future__ import annotations
 
 # Copyright 2025 Black Forest Labs and The HuggingFace Team. All rights reserved.
 #

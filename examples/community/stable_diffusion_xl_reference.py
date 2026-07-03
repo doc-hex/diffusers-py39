@@ -1,5 +1,7 @@
 # Based on stable_diffusion_reference.py
 
+from __future__ import annotations
+
 import inspect
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 

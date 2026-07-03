@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Any
+from typing import Any, Union
 
 import numpy as np
 import PIL
@@ -68,7 +68,7 @@ class StableDiffusionXLDecodeStep(ModularPipelineBlocks):
         return [
             OutputParam(
                 "images",
-                type_hint=list[PIL.Image.Image] | list[torch.Tensor] | list[np.array],
+                type_hint=Union[list[PIL.Image.Image], list[torch.Tensor], list[np.array]],
                 description="The generated images, can be a PIL.Image.Image, torch.Tensor or a numpy array",
             )
         ]
@@ -171,7 +171,7 @@ class StableDiffusionXLInpaintOverlayMaskStep(ModularPipelineBlocks):
             InputParam("padding_mask_crop"),
             InputParam(
                 "images",
-                type_hint=list[PIL.Image.Image] | list[torch.Tensor] | list[np.array],
+                type_hint=Union[list[PIL.Image.Image], list[torch.Tensor], list[np.array]],
                 description="The generated images from the decode step",
             ),
             InputParam(

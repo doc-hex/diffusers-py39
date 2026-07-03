@@ -15,6 +15,7 @@
 """
 Text and VAE encoder blocks for QwenImage pipelines.
 """
+from __future__ import annotations
 
 import PIL
 import torch

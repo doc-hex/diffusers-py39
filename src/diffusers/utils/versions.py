@@ -14,6 +14,7 @@
 """
 Utilities for working with package versions
 """
+from __future__ import annotations
 
 import importlib.metadata
 import operator

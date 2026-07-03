@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+from typing import Union
+
 import torch
 from transformers import (
     CLIPImageProcessor,
@@ -603,7 +606,7 @@ class StableDiffusionXLVaeEncoderStep(ModularPipelineBlocks):
             InputParam("dtype", type_hint=torch.dtype, description="Data type of model tensor inputs"),
             InputParam(
                 "preprocess_kwargs",
-                type_hint=dict | None,
+                type_hint=Union[dict, None],
                 description="A kwargs dictionary that if specified is passed along to the `ImageProcessor` as defined under `self.image_processor` in [diffusers.image_processor.VaeImageProcessor]",
             ),
         ]
@@ -734,7 +737,7 @@ class StableDiffusionXLInpaintVaeEncoderStep(ModularPipelineBlocks):
             ),
             OutputParam(
                 "crops_coords",
-                type_hint=tuple[int, int] | None,
+                type_hint=Union[tuple[int, int], None],
                 description="The crop coordinates to use for the preprocess/postprocess of the image and mask",
             ),
         ]

@@ -20,6 +20,7 @@ instead of imported so the audio module is self-contained. The encoder is the Co
 by AVAE checkpoints; it is intentionally separate from Oobleck's waveform encoder because the tensor layouts and
 bottleneck semantics are different.
 """
+from __future__ import annotations
 
 import math
 from collections import OrderedDict

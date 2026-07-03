@@ -30,6 +30,7 @@ transformers/transformer_2d.py}`` — specifically, when ``use_self_attention=Fa
 as the post-self-attn hidden state instead of running ``attn1``, matching the "Remove self-attention" path used by
 DreamLite's ``DreamLiteCrossAttnNoSelfAttnDownBlock2D`` and ``DreamLiteCrossAttnNoSelfAttnUpBlock2D``.
 """
+from __future__ import annotations
 
 from typing import Any
 

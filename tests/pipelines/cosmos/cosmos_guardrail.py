@@ -15,6 +15,8 @@
 # ===== This file is an implementation of a dummy guardrail for the fast tests =====
 
 
+from __future__ import annotations
+
 import numpy as np
 import torch
 

@@ -15,6 +15,7 @@
 """
 Ernie-Image Transformer2DModel for HuggingFace Diffusers.
 """
+from __future__ import annotations
 
 import inspect
 from dataclasses import dataclass

@@ -10,6 +10,7 @@ CUDA_VISIBLE_DEVICES=0 python scripts/convert_cosmos3_to_diffusers.py \
     --output converted/cosmos3-nano-pipeline \
     --save-pipeline
 """
+from __future__ import annotations
 
 import argparse
 import contextlib

@@ -18,6 +18,8 @@
 #   python scripts/convert_longcat_audio_dit_to_diffusers.py --repo_id meituan-longcat/LongCat-AudioDiT-1B --output_path /data/models
 #   python scripts/convert_longcat_audio_dit_to_diffusers.py --checkpoint_path /path/to/model --output_path /data/models --dtype fp16
 
+from __future__ import annotations
+
 import argparse
 import json
 from pathlib import Path

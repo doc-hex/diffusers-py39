@@ -24,6 +24,7 @@ Video-to-video:
 Text-to-video-with-sound (requires a sound-capable checkpoint):
     python inference_cosmos3.py --prompt "..." --enable-sound
 """
+from __future__ import annotations
 
 import argparse
 import json

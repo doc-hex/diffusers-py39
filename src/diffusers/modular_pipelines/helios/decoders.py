@@ -1,3 +1,5 @@
+from typing import Union
+
 # Copyright 2026 The HuggingFace Team. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,7 +68,7 @@ class HeliosDecodeStep(ModularPipelineBlocks):
         return [
             OutputParam(
                 "videos",
-                type_hint=list[list[PIL.Image.Image]] | list[torch.Tensor] | list[np.ndarray],
+                type_hint=Union[list[list[PIL.Image.Image]], list[torch.Tensor], list[np.ndarray]],
                 description="The generated videos, can be a PIL.Image.Image, torch.Tensor or a numpy array",
             ),
         ]
