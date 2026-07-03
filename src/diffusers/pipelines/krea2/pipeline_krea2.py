@@ -15,7 +15,7 @@
 from __future__ import annotations
 
 import inspect
-from typing import Any, Callable
+from typing import Any, Callable, List, Optional, Tuple, Union
 
 import numpy as np
 import torch
@@ -172,7 +172,7 @@ class Krea2Pipeline(DiffusionPipeline, Krea2LoraLoaderMixin):
         text_encoder: Qwen3VLModel,
         tokenizer: AutoTokenizer,
         transformer: Krea2Transformer2DModel,
-        text_encoder_select_layers: tuple[int, ...] | list[int] | None = None,
+        text_encoder_select_layers: Optional[Union[Tuple[int, ...], List[int]]] = None,
         is_distilled: bool = False,
         patch_size: int = 2,
     ):
