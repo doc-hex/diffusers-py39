@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import importlib
+import json
 import os
 import re
 import warnings
@@ -941,6 +942,17 @@ def load_sub_model(
         ):
             text_config.rope_scaling = rope_parameters
             loading_kwargs["config"] = config
+
+    if issubclass(class_obj, PreTrainedTokenizerBase) and component_path is not None:
+        tokenizer_config_path = os.path.join(component_path, "tokenizer_config.json")
+        if os.path.isfile(tokenizer_config_path):
+            with open(tokenizer_config_path, encoding="utf-8") as tokenizer_config_file:
+                tokenizer_config = json.load(tokenizer_config_file)
+
+            extra_special_tokens = tokenizer_config.get("extra_special_tokens")
+            if isinstance(extra_special_tokens, list):
+                loading_kwargs["additional_special_tokens"] = extra_special_tokens
+                loading_kwargs["extra_special_tokens"] = {}
 
     # check if the module is in a subdirectory
     if dduf_entries:
