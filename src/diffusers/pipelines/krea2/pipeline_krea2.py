@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 import inspect
-import json
 import os
 from typing import Any, Callable, List, Optional, Tuple, Union
 
@@ -27,7 +26,7 @@ from ...image_processor import VaeImageProcessor
 from ...loaders import Krea2LoraLoaderMixin
 from ...models import AutoencoderKLQwenImage, Krea2Transformer2DModel
 from ...schedulers import FlowMatchEulerDiscreteScheduler
-from ...utils import is_torch_xla_available, is_transformers_version, logging, replace_example_docstring
+from ...utils import is_torch_xla_available, logging, replace_example_docstring
 from ...utils.torch_utils import randn_tensor
 from ..pipeline_utils import DiffusionPipeline
 from .pipeline_output import Krea2PipelineOutput
@@ -169,44 +168,60 @@ class Krea2Pipeline(DiffusionPipeline, Krea2LoraLoaderMixin):
 
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path: str | os.PathLike, **kwargs):
-        if "text_encoder" not in kwargs:
-            pretrained_model_name_or_path = os.fspath(pretrained_model_name_or_path)
-            text_encoder_dir = os.path.join(pretrained_model_name_or_path, "text_encoder")
-            text_encoder_files = (
-                "pytorch_model.bin",
-                "pytorch_model.bin.index.json",
-                "model.safetensors",
-                "model.safetensors.index.json",
-                "tf_model.h5",
-                "model.ckpt.index",
-                "flax_model.msgpack",
-            )
-            has_text_encoder_config = os.path.isfile(os.path.join(text_encoder_dir, "config.json"))
-            has_text_encoder_weights = any(
-                os.path.isfile(os.path.join(text_encoder_dir, f)) for f in text_encoder_files
-            )
+        pretrained_model_name_or_path = os.fspath(pretrained_model_name_or_path)
+        if os.path.isdir(pretrained_model_name_or_path):
+            required_files = [
+                "model_index.json",
+                "scheduler/scheduler_config.json",
+                "tokenizer/tokenizer.json",
+                "vae/config.json",
+                "transformer/config.json",
+            ]
+            required_file_groups = [
+                ("vae weights", ("vae/diffusion_pytorch_model.safetensors", "vae/diffusion_pytorch_model.bin")),
+                (
+                    "transformer weights",
+                    (
+                        "transformer/diffusion_pytorch_model.safetensors",
+                        "transformer/diffusion_pytorch_model.safetensors.index.json",
+                        "transformer/diffusion_pytorch_model.bin",
+                        "transformer/diffusion_pytorch_model.bin.index.json",
+                    ),
+                ),
+            ]
+            if kwargs.get("text_encoder", inspect.Signature.empty) is not None:
+                required_files.append("text_encoder/config.json")
+                required_file_groups.append(
+                    (
+                        "text encoder weights",
+                        (
+                            "text_encoder/model.safetensors",
+                            "text_encoder/pytorch_model.bin",
+                            "text_encoder/pytorch_model.bin.index.json",
+                            "text_encoder/model.safetensors.index.json",
+                        ),
+                    )
+                )
 
-            if os.path.isdir(text_encoder_dir) and has_text_encoder_config and not has_text_encoder_weights:
-                with open(os.path.join(text_encoder_dir, "config.json"), encoding="utf-8") as config_file:
-                    text_encoder_config = json.load(config_file)
+            missing_files = [
+                filename
+                for filename in required_files
+                if not os.path.isfile(os.path.join(pretrained_model_name_or_path, filename))
+            ]
+            for label, filenames in required_file_groups:
+                if not any(
+                    os.path.isfile(os.path.join(pretrained_model_name_or_path, filename)) for filename in filenames
+                ):
+                    missing_files.append(f"{label} ({' or '.join(filenames)})")
 
-                text_encoder_id = text_encoder_config.get("_name_or_path") or "Qwen/Qwen3-VL-4B-Instruct"
-                if os.path.abspath(os.fspath(text_encoder_id)) == os.path.abspath(text_encoder_dir):
-                    text_encoder_id = "Qwen/Qwen3-VL-4B-Instruct"
-                text_encoder_kwargs = {}
-                torch_dtype = kwargs.get("torch_dtype")
-                if isinstance(torch_dtype, dict):
-                    torch_dtype = torch_dtype.get("text_encoder", torch_dtype.get("default"))
-                if torch_dtype is not None:
-                    if is_transformers_version(">=", "4.56.0"):
-                        text_encoder_kwargs["dtype"] = torch_dtype
-                    else:
-                        text_encoder_kwargs["torch_dtype"] = torch_dtype
-                for key in ("cache_dir", "force_download", "local_files_only", "proxies", "revision", "token"):
-                    if key in kwargs:
-                        text_encoder_kwargs[key] = kwargs[key]
-
-                kwargs["text_encoder"] = Qwen3VLModel.from_pretrained(text_encoder_id, **text_encoder_kwargs)
+            if missing_files:
+                formatted = "\n".join(f"- {filename}" for filename in missing_files)
+                raise EnvironmentError(
+                    "The local Krea 2 checkpoint is incomplete. Missing required files:\n"
+                    f"{formatted}\n"
+                    "Download the full repository with Git LFS or use "
+                    "`Krea2Pipeline.from_pretrained('krea/Krea-2-Turbo', ...)`."
+                )
 
         return super().from_pretrained(pretrained_model_name_or_path, **kwargs)
 
