@@ -15,6 +15,8 @@
 from __future__ import annotations
 
 import inspect
+import json
+import os
 from typing import Any, Callable, List, Optional, Tuple, Union
 
 import numpy as np
@@ -25,7 +27,7 @@ from ...image_processor import VaeImageProcessor
 from ...loaders import Krea2LoraLoaderMixin
 from ...models import AutoencoderKLQwenImage, Krea2Transformer2DModel
 from ...schedulers import FlowMatchEulerDiscreteScheduler
-from ...utils import is_torch_xla_available, logging, replace_example_docstring
+from ...utils import is_torch_xla_available, is_transformers_version, logging, replace_example_docstring
 from ...utils.torch_utils import randn_tensor
 from ..pipeline_utils import DiffusionPipeline
 from .pipeline_output import Krea2PipelineOutput
@@ -164,6 +166,49 @@ class Krea2Pipeline(DiffusionPipeline, Krea2LoraLoaderMixin):
 
     model_cpu_offload_seq = "text_encoder->transformer->vae"
     _callback_tensor_inputs = ["latents", "prompt_embeds"]
+
+    @classmethod
+    def from_pretrained(cls, pretrained_model_name_or_path: str | os.PathLike, **kwargs):
+        if "text_encoder" not in kwargs:
+            pretrained_model_name_or_path = os.fspath(pretrained_model_name_or_path)
+            text_encoder_dir = os.path.join(pretrained_model_name_or_path, "text_encoder")
+            text_encoder_files = (
+                "pytorch_model.bin",
+                "pytorch_model.bin.index.json",
+                "model.safetensors",
+                "model.safetensors.index.json",
+                "tf_model.h5",
+                "model.ckpt.index",
+                "flax_model.msgpack",
+            )
+            has_text_encoder_config = os.path.isfile(os.path.join(text_encoder_dir, "config.json"))
+            has_text_encoder_weights = any(
+                os.path.isfile(os.path.join(text_encoder_dir, f)) for f in text_encoder_files
+            )
+
+            if os.path.isdir(text_encoder_dir) and has_text_encoder_config and not has_text_encoder_weights:
+                with open(os.path.join(text_encoder_dir, "config.json"), encoding="utf-8") as config_file:
+                    text_encoder_config = json.load(config_file)
+
+                text_encoder_id = text_encoder_config.get("_name_or_path") or "Qwen/Qwen3-VL-4B-Instruct"
+                if os.path.abspath(os.fspath(text_encoder_id)) == os.path.abspath(text_encoder_dir):
+                    text_encoder_id = "Qwen/Qwen3-VL-4B-Instruct"
+                text_encoder_kwargs = {}
+                torch_dtype = kwargs.get("torch_dtype")
+                if isinstance(torch_dtype, dict):
+                    torch_dtype = torch_dtype.get("text_encoder", torch_dtype.get("default"))
+                if torch_dtype is not None:
+                    if is_transformers_version(">=", "4.56.0"):
+                        text_encoder_kwargs["dtype"] = torch_dtype
+                    else:
+                        text_encoder_kwargs["torch_dtype"] = torch_dtype
+                for key in ("cache_dir", "force_download", "local_files_only", "proxies", "revision", "token"):
+                    if key in kwargs:
+                        text_encoder_kwargs[key] = kwargs[key]
+
+                kwargs["text_encoder"] = Qwen3VLModel.from_pretrained(text_encoder_id, **text_encoder_kwargs)
+
+        return super().from_pretrained(pretrained_model_name_or_path, **kwargs)
 
     def __init__(
         self,
