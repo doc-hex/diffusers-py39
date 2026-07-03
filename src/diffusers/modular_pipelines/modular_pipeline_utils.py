@@ -16,10 +16,10 @@ from __future__ import annotations
 
 import inspect
 import re
+import types
 import warnings
 from collections import OrderedDict
 from dataclasses import dataclass, field
-from types import UnionType
 from typing import Any, Literal, Type, Union, get_args, get_origin
 
 import PIL.Image
@@ -718,7 +718,7 @@ def format_params(params, header="Args", indent_level=4, max_line_length=115):
     formatted_params = []
 
     def get_type_str(type_hint):
-        if isinstance(type_hint, UnionType) or get_origin(type_hint) is Union:
+        if (hasattr(types, "UnionType") and isinstance(type_hint, types.UnionType)) or get_origin(type_hint) is Union:
             type_strs = [t.__name__ if hasattr(t, "__name__") else str(t) for t in get_args(type_hint)]
             return " | ".join(type_strs)
         return type_hint.__name__ if hasattr(type_hint, "__name__") else str(type_hint)
@@ -821,7 +821,7 @@ def format_params_markdown(params, header="Inputs"):
         return ""
 
     def get_type_str(type_hint):
-        if isinstance(type_hint, UnionType) or get_origin(type_hint) is Union:
+        if (hasattr(types, "UnionType") and isinstance(type_hint, types.UnionType)) or get_origin(type_hint) is Union:
             type_strs = [t.__name__ if hasattr(t, "__name__") else str(t) for t in get_args(type_hint)]
             return " | ".join(type_strs)
         return type_hint.__name__ if hasattr(type_hint, "__name__") else str(type_hint)

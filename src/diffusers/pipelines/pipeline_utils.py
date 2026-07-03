@@ -1878,7 +1878,7 @@ class DiffusionPipeline(ConfigMixin, PushToHubMixin):
                     signature_types[param_name] = (annotation,)
                 elif get_origin(annotation) == Union:
                     signature_types[param_name] = get_args(annotation)
-                elif isinstance(annotation, types.UnionType):
+                elif hasattr(types, "UnionType") and isinstance(annotation, types.UnionType):
                     # Handle PEP 604 union syntax (X | Y) introduced in Python 3.10+
                     signature_types[param_name] = get_args(annotation)
                 elif get_origin(annotation) in [List, Dict, list, dict]:
