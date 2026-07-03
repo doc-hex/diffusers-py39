@@ -745,7 +745,17 @@ def _maybe_download_kernel_for_backend(backend: AttentionBackendName) -> None:
 # Registrations are required for fullgraph tracing compatibility
 # TODO: this is only required because the beta release FA3 does not have it. There is a PR adding
 # this but it was never merged: https://github.com/Dao-AILab/flash-attention/pull/1590
-@_custom_op("_diffusers_flash_attn_3::_flash_attn_forward", mutates_args=(), device_types="cuda")
+@_custom_op(
+    "_diffusers_flash_attn_3::_flash_attn_forward",
+    mutates_args=(),
+    device_types="cuda",
+    schema=(
+        "(Tensor q, Tensor k, Tensor v, float? softmax_scale=None, bool causal=False, Tensor? qv=None, "
+        "Tensor? q_descale=None, Tensor? k_descale=None, Tensor? v_descale=None, int attention_chunk=0, "
+        "float softcap=0.0, int num_splits=1, bool? pack_gqa=None, bool deterministic=False, int sm_margin=0) "
+        "-> (Tensor, Tensor)"
+    ),
+)
 def _wrapped_flash_attn_3(
     q: torch.Tensor,
     k: torch.Tensor,
