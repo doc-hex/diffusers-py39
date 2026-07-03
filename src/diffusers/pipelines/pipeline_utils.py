@@ -129,7 +129,7 @@ class ImagePipelineOutput(BaseOutput):
             num_channels)`.
     """
 
-    images: list[PIL.Image.Image] | np.ndarray
+    images: Union[List[PIL.Image.Image], np.ndarray]
 
 
 @dataclass
