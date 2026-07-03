@@ -18,6 +18,8 @@ import importlib
 import json
 import os
 import re
+import shutil
+import tempfile
 import warnings
 from pathlib import Path
 from typing import Any, Callable
@@ -943,6 +945,7 @@ def load_sub_model(
             text_config.rope_scaling = rope_parameters
             loading_kwargs["config"] = config
 
+    temporary_component_path = None
     if issubclass(class_obj, PreTrainedTokenizerBase) and component_path is not None:
         tokenizer_config_path = os.path.join(component_path, "tokenizer_config.json")
         if os.path.isfile(tokenizer_config_path):
@@ -951,18 +954,32 @@ def load_sub_model(
 
             extra_special_tokens = tokenizer_config.get("extra_special_tokens")
             if isinstance(extra_special_tokens, list):
-                loading_kwargs["additional_special_tokens"] = extra_special_tokens
-                loading_kwargs["extra_special_tokens"] = {}
+                existing_additional_special_tokens = tokenizer_config.get("additional_special_tokens", [])
+                tokenizer_config["additional_special_tokens"] = existing_additional_special_tokens + extra_special_tokens
+                tokenizer_config["extra_special_tokens"] = {}
+
+                temporary_component_path = tempfile.mkdtemp(prefix="diffusers-tokenizer-")
+                shutil.copytree(component_path, temporary_component_path, dirs_exist_ok=True)
+                with open(
+                    os.path.join(temporary_component_path, "tokenizer_config.json"), "w", encoding="utf-8"
+                ) as tokenizer_config_file:
+                    json.dump(tokenizer_config, tokenizer_config_file, indent=2)
+                    tokenizer_config_file.write("\n")
+                component_path = temporary_component_path
 
     # check if the module is in a subdirectory
-    if dduf_entries:
-        loading_kwargs["dduf_entries"] = dduf_entries
-        loaded_sub_model = load_method(name, **loading_kwargs)
-    elif os.path.isdir(os.path.join(cached_folder, name)):
-        loaded_sub_model = load_method(os.path.join(cached_folder, name), **loading_kwargs)
-    else:
-        # else load from the root directory
-        loaded_sub_model = load_method(cached_folder, **loading_kwargs)
+    try:
+        if dduf_entries:
+            loading_kwargs["dduf_entries"] = dduf_entries
+            loaded_sub_model = load_method(name, **loading_kwargs)
+        elif component_path is not None:
+            loaded_sub_model = load_method(component_path, **loading_kwargs)
+        else:
+            # else load from the root directory
+            loaded_sub_model = load_method(cached_folder, **loading_kwargs)
+    finally:
+        if temporary_component_path is not None:
+            shutil.rmtree(temporary_component_path)
 
     if isinstance(loaded_sub_model, torch.nn.Module) and isinstance(device_map, dict) and not use_flashpack:
         # remove hooks
